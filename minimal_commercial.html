@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClaudeHub - Minimal macOS Launcher</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=SF+Pro+Display:wght@500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Text', 'SF Pro Display', 'Inter', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
+            mono: ['SF Mono', 'Menlo', 'Monaco', 'Courier New', 'monospace']
+          },
+          colors: {
+            mac: {
+              bg: '#161618',
+              card: '#1e1e22',
+              cardHover: '#25252b',
+              border: 'rgba(255, 255, 255, 0.08)',
+              borderHover: 'rgba(255, 255, 255, 0.16)',
+              subtext: '#86868b',
+              text: '#f5f5f7'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* macOS standard squircle smoothing */
+    .squircle {
+      border-radius: 17px;
+    }
+    .hud-window {
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.09);
+    }
+    .app-card {
+      transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .app-card:hover {
+      transform: translateY(-2px);
+    }
+    .app-card:active {
+      transform: translateY(0) scale(0.985);
+    }
+  </style>
+</head>
+<body class="bg-[#0b0b0d] text-[#f5f5f7] min-h-screen flex items-center justify-center p-4 selection:bg-[#3b3a3e] selection:text-white font-sans antialiased">
+
+  <!-- HUD Container: exact 700px x 240px macOS window -->
+  <div class="w-[700px] h-[240px] bg-mac-bg/95 backdrop-blur-3xl rounded-[18px] hud-window flex flex-col overflow-hidden relative select-none">
+    
+    <!-- macOS Top Titlebar (38px height) -->
+    <header class="h-[38px] px-4 flex items-center justify-between border-b border-white/[0.06] bg-white/[0.015]">
+      <!-- Left: Native macOS Traffic Lights & Title -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 group cursor-default">
+          <div class="w-3 h-3 rounded-full bg-[#ff5f57] border border-[#e0443e]/40 shadow-inner"></div>
+          <div class="w-3 h-3 rounded-full bg-[#febc2e] border border-[#d89e24]/40 shadow-inner"></div>
+          <div class="w-3 h-3 rounded-full bg-[#28c840] border border-[#1aab29]/40 shadow-inner"></div>
+        </div>
+        <div class="h-3 w-[1px] bg-white/10 ml-0.5"></div>
+        <span class="text-[12.5px] font-semibold tracking-tight text-white/90">ClaudeHub</span>
+      </div>
+
+      <!-- Right: Pure Apple Minimal Proxy Badge -->
+      <div class="flex items-center gap-2">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-[11px] font-medium tracking-tight">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#30d158] ring-2 ring-[#30d158]/20"></span>
+          <span class="text-[#86868b]">代理锁定</span>
+          <span class="font-mono text-[#d1d1d6] font-normal text-[10.5px]">127.0.0.1:7897</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area: 1 Row of 4 Large Cards -->
+    <main class="flex-1 px-4 py-3 grid grid-cols-4 gap-3 items-center">
+      
+      <!-- Card 1: 专用 Chrome -->
+      <button class="app-card group h-[174px] rounded-2xl bg-white/[0.025] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/[0.12] flex flex-col items-center justify-center p-3 text-center cursor-pointer focus:outline-none focus:ring-1 focus:ring-white/20">
+        <!-- 64x64px Polished Chrome Icon -->
+        <div class="w-16 h-16 squircle bg-[#232429] border border-white/[0.1] shadow-md flex items-center justify-center mb-2.5 p-2 transition-transform duration-200 group-hover:scale-105">
+          <svg class="w-11 h-11" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#chrome-clip)">
+              <circle cx="96" cy="96" r="96" fill="#4285F4"/>
+              <path d="M96 0L179.138 144H96L96 0Z" fill="#EA4335"/>
+              <path d="M96 0L12.8616 144H96V0Z" fill="#34A853"/>
+              <circle cx="96" cy="96" r="88" fill="#F8F9FA"/>
+              <!-- Top Red Segment -->
+              <path d="M96 8C136.216 8 170.216 34.618 181.045 72.825L96 72.825L96 8Z" fill="#EA4335"/>
+              <path d="M184 96C184 47.3989 144.601 8 96 8L139.5 83.3333L184 96Z" fill="#EA4335"/>
+              <!-- Yellow Right/Bottom Segment -->
+              <path d="M184 96C184 144.601 144.601 184 96 184L139.5 108.667L184 96Z" fill="#FBBC04"/>
+              <!-- Green Left Segment -->
+              <path d="M96 184C47.3989 184 8 144.601 8 96C8 71.8601 17.697 49.9839 33.3855 34.0205L76.8855 109.354L96 184Z" fill="#34A853"/>
+              <circle cx="96" cy="96" r="41" fill="#FFFFFF"/>
+              <circle cx="96" cy="96" r="33" fill="#1A73E8"/>
+            </g>
+            <defs>
+              <clipPath id="chrome-clip">
+                <circle cx="96" cy="96" r="96"/>
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
+        <span class="text-[13px] font-semibold text-[#f5f5f7] tracking-tight mb-0.5">专用 Chrome</span>
+        <span class="text-[11px] text-[#86868b] font-normal tracking-normal">独立沙箱</span>
+      </button>
+
+      <!-- Card 2: Claude Code -->
+      <button class="app-card group h-[174px] rounded-2xl bg-white/[0.025] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/[0.12] flex flex-col items-center justify-center p-3 text-center cursor-pointer focus:outline-none focus:ring-1 focus:ring-white/20">
+        <!-- 64x64px Polished Terminal Squircle Icon -->
+        <div class="w-16 h-16 squircle bg-[#1a1b1e] border border-white/[0.12] shadow-md flex items-center justify-center mb-2.5 transition-transform duration-200 group-hover:scale-105 relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-b from-white/[0.06] to-transparent"></div>
+          <div class="relative flex items-center font-mono font-bold text-white/95 text-[22px] tracking-tighter">
+            <span class="text-[#d1d1d6]">&gt;</span>
+            <span class="text-[#f5f5f7] -ml-0.5">_</span>
+          </div>
+        </div>
+        <span class="text-[13px] font-semibold text-[#f5f5f7] tracking-tight mb-0.5">Claude Code</span>
+        <span class="text-[11px] text-[#86868b] font-normal tracking-normal">CLI 终端</span>
+      </button>
+
+      <!-- Card 3: Claude 桌面版 -->
+      <button class="app-card group h-[174px] rounded-2xl bg-white/[0.025] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/[0.12] flex flex-col items-center justify-center p-3 text-center cursor-pointer focus:outline-none focus:ring-1 focus:ring-white/20">
+        <!-- 64x64px Official Anthropic Terracotta Icon -->
+        <div class="w-16 h-16 squircle bg-[#231b19] border border-[#d97757]/30 shadow-md flex items-center justify-center mb-2.5 transition-transform duration-200 group-hover:scale-105 relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-b from-[#d97757]/15 to-transparent"></div>
+          <!-- Anthropic Sparkle / 4-pointed Star Geometry -->
+          <svg class="w-8 h-8 text-[#d97757] relative" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C12.4 7.2 16.8 11.6 22 12C16.8 12.4 12.4 16.8 12 22C11.6 16.8 7.2 12.4 2 12C7.2 11.6 11.6 7.2 12 2Z"/>
+          </svg>
+        </div>
+        <span class="text-[13px] font-semibold text-[#f5f5f7] tracking-tight mb-0.5">Claude 桌面版</span>
+        <span class="text-[11px] text-[#86868b] font-normal tracking-normal">官方客户端</span>
+      </button>
+
+      <!-- Card 4: 清理旧账号 -->
+      <button class="app-card group h-[174px] rounded-2xl bg-white/[0.025] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/[0.12] flex flex-col items-center justify-center p-3 text-center cursor-pointer focus:outline-none focus:ring-1 focus:ring-white/20">
+        <!-- 64x64px Clean Apple Shield / Security Squircle Icon -->
+        <div class="w-16 h-16 squircle bg-[#221c1d] border border-white/[0.1] shadow-md flex items-center justify-center mb-2.5 transition-transform duration-200 group-hover:scale-105 relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent"></div>
+          <svg class="w-7 h-7 text-[#e06c60]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9.5 12l2 2 4.5-4.5" stroke-width="1.8"/>
+          </svg>
+        </div>
+        <span class="text-[13px] font-semibold text-[#f5f5f7] tracking-tight mb-0.5">清理旧账号</span>
+        <span class="text-[11px] text-[#86868b] font-normal tracking-normal">解绑凭据</span>
+      </button>
+
+    </main>
+
+  </div>
+
+</body>
+</html>
